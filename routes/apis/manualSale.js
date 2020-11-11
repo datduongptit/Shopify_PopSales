@@ -8,9 +8,9 @@ const {check, validationResult} = require('express-validator');
 
 // GET all Manual Sales
 router.get('/', async (req, res) => {
-    conn.query('SELECT * FROM manualsales', function (error, results, fields) {
+    await conn.query('SELECT * FROM manualsales', function (error, results, fields) {
         if (error) throw error;
-        return res.send({ error: false, data: results, message: 'manualsales list.' });
+        return res.send(results);
     });
     
 });
@@ -26,7 +26,7 @@ router.get('/:id', async (req, res) => {
 
     conn.query('SELECT * FROM manualsales where id=?', id, function (error, results, fields) {
         if (error) throw error;
-        return res.send({ error: false, data: results[0], message: 'users list.' });
+        return res.send(results);
     });
 
 });
@@ -47,7 +47,7 @@ router.post('/', [
     try {   
         conn.query(`INSERT INTO manualsales SET ?`, { firstName: firstName, lastName: lastName, city: city, product: product, order: order, publishOrder: publishOrder}, async function (error, results, fields) {
             if (error) throw error;
-            return await res.send({ error: false, data: results, message: 'New user has been created successfully.' });
+            return await res.send(results);
         });      
     } catch (err) {
         console.error(err.message);
@@ -62,11 +62,26 @@ router.put('/:id', async (req, res) => {
     try {
         conn.query(`UPDATE manualsales SET ? WHERE id = ${id}`, {firstName: firstName, lastName: lastName, city: city, product: product, order: order, publishOrder: publishOrder}, function (error, results, fields) {
             if (error) throw error;
-            return res.send({ error: false, data: results, message: 'Update successfully' });
+            return res.send(results);
         })
     } catch (err) {
         console.error(err.message);
         res.status(500).send('Server Error')
+    }
+});
+
+// Update publish order 
+router.put('/publishOrder/:id', async (req, res) => {
+    try {
+        const id = req.params.id
+        const publishOrder = req.body;
+        conn.query(`UPDATE manualsales SET ? WHERE id = ${id}`, publishOrder, (error, results, fields) => {
+            if(error) throw error;
+            return res.send(results)
+        })
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server Error');
     }
 })
 

@@ -8,7 +8,7 @@ router.get('/', async (req, res) => {
     try {
         conn.query('SELECT * FROM realtime_setting', (error, results, fields) => {
             if (error) throw error;
-            return res.send({ error: false, data: results})
+            return res.send(results)
         })
     } catch (err) {
         console.error(err.message);
@@ -57,7 +57,7 @@ router.post('/', async (req, res) => {
             };
             conn.query('UPDATE realtime_setting SET ? WHERE 1', realtimeFields, (error, results, fields) => {
                 if(error) throw error;
-                return res.send({ error: false, data: results, message: 'OK'});
+                return res.send(results);
             });
         })
     } catch (err) {

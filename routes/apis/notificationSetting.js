@@ -28,7 +28,7 @@ router.post('/', async(req, res) => {
         colorDate,
         borderRadius
     } = req.body;
-
+    var b=[]
     const notiFields = {};
     if(showOrder) notiFields.showOrder = showOrder;
     if(selectOrder) notiFields.selectOrder = selectOrder;
@@ -61,7 +61,7 @@ router.post('/', async(req, res) => {
             };
             conn.query("UPDATE notificationsetting SET ? WHERE 1", notiFields , async function (error, results, fields) {
                 if (error) throw error;
-                return await res.send({ error: false, data: results, message: 'Updated' });
+                return await res.send(results);
             });
         })
     } catch (err) {
@@ -75,7 +75,7 @@ router.get('/', async (req, res) => {
     try {
         conn.query('SELECT * FROM notificationsetting', (error, results, fields) => {
             if (error) throw error;
-            return res.send({ error: false, data: results, message: 'Get' });
+            return res.send(results);
         })
     } catch (err) {
         console.error(err.message);
