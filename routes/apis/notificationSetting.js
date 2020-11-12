@@ -61,7 +61,7 @@ router.post('/', async(req, res) => {
             };
             conn.query("UPDATE notificationsetting SET ? WHERE 1", notiFields , async function (error, results, fields) {
                 if (error) throw error;
-                return await res.send(results);
+                return await res.send(notiFields);
             });
         })
     } catch (err) {

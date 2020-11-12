@@ -57,7 +57,7 @@ router.post('/', async (req, res) => {
             };
             conn.query('UPDATE realtime_setting SET ? WHERE 1', realtimeFields, (error, results, fields) => {
                 if(error) throw error;
-                return res.send(results);
+                return res.send(realtimeFields);
             });
         })
     } catch (err) {
