@@ -2,15 +2,12 @@ const express = require('express');
 const router = express.Router();
 const conn = require('../../config/db');
 const {check, validationResult} = require('express-validator');
-// const Sequelize = require('sequelize')
-// const ManualSale = require('../../model/ManualSale');
-
 
 // GET all Manual Sales
 router.get('/', async (req, res) => {
-    await conn.query('SELECT * FROM manualsales', function (error, results, fields) {
+    conn.query('SELECT * FROM manualsales',async function (error, results, fields) {
         if (error) throw error;
-        return res.send(results);
+        return await res.send(results);
     });
     
 });
@@ -36,7 +33,6 @@ router.post('/', [
     check('firstName', 'Firstname is required').not().isEmpty(),
     check('lastName', 'Lastname is required').not().isEmpty(),
     check('city', 'City is required').not().isEmpty(),
-    // check('publishOrder', 'PublishOrder is required').not().isEmpty(),
     check('product', 'Product is required').not().isEmpty()
 ], async (req, res) => {
     const errors = validationResult(req, res);
@@ -45,9 +41,9 @@ router.post('/', [
     }
     const {firstName, lastName, city, product, order, publishOrder} = req.body;
     try {   
-        conn.query(`INSERT INTO manualsales SET ?`, { firstName: firstName, lastName: lastName, city: city, product: product, order: order, publishOrder: publishOrder}, async function (error, results, fields) {
+        conn.query(`INSERT INTO manualsales SET ?`, { firstName: firstName, lastName: lastName, city: city, product: product, order: order, publishOrder: publishOrder }, async (error, results, fields) => {
             if (error) throw error;
-            return await res.send(results);
+            return await res.send({ firstName: firstName, lastName: lastName, city: city, product: product, order: order, publishOrder: Number(publishOrder)});
         });      
     } catch (err) {
         console.error(err.message);
@@ -59,8 +55,17 @@ router.post('/', [
 router.put('/:id', async (req, res) => {
     const id = req.params.id;
     const {firstName, lastName, city, product, order, publishOrder} = req.body;
+
+    let manualFeilds = {};
+    if(firstName) manualFeilds.firstName = firstName;
+    if(lastName) manualFeilds.lastName = lastName;
+    if(city) manualFeilds.city = city;
+    if(publishOrder) manualFeilds.publishOrder = publishOrder;
+    if(product) manualFeilds.product = product;
+    if(order) manualFeilds.order = order;
+
     try {
-        conn.query(`UPDATE manualsales SET ? WHERE id = ${id}`, {firstName: firstName, lastName: lastName, city: city, product: product, order: order, publishOrder: publishOrder}, function (error, results, fields) {
+        conn.query(`UPDATE manualsales SET ? WHERE id = ${id}`, manualFeilds, function (error, results, fields) {
             if (error) throw error;
             return res.send(results);
         })

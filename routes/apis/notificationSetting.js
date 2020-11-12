@@ -34,7 +34,7 @@ router.post('/', async(req, res) => {
     if(selectOrder) notiFields.selectOrder = selectOrder;
     if(customShow) notiFields.customShow = customShow;
     if(numberOfLive) notiFields.numberOfLive = numberOfLive;
-    // if(orderStatus) notiFields.orderStatus = orderStatus;
+    if(orderStatus) notiFields.orderStatus = orderStatus;
     if(nextTimeDisplay) notiFields.nextTimeDisplay = nextTimeDisplay;
     if(displaytime) notiFields.displaytime = displaytime;
     if(dateFormat) notiFields.dateFormat = dateFormat;
@@ -47,9 +47,9 @@ router.post('/', async(req, res) => {
     if(textColor) notiFields.textColor = textColor;
     if(colorDate) notiFields.colorDate = colorDate;
     if(borderRadius) notiFields.borderRadius = borderRadius;
-    if (orderStatus) {
-        notiFields.orderStatus = orderStatus.split(',').map((item) => item.trim());
-      }
+    // if (orderStatus) {
+    //     notiFields.orderStatus = orderStatus.split(',').map((item) => item.trim());
+    //   }
     try {
         conn.query('SELECT * FROM notificationsetting', (error, results, fields) => {
             if (error) throw error;

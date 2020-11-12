@@ -52,7 +52,7 @@ router.post('/', async (req, res) => {
             if(results.length === 0) {
                 conn.query('INSERT INTO realtime_setting SET ?', realtimeFields, async (error, results, fields) => {
                     if(error) throw error;
-                    return await res.send({  error: false, data: results, message: 'Created'  })
+                    return await res.send(results)
                 });
             };
             conn.query('UPDATE realtime_setting SET ? WHERE 1', realtimeFields, (error, results, fields) => {
